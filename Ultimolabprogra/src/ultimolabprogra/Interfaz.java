@@ -135,11 +135,114 @@ public class Interfaz extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+       ArrayList<String[]> datosComboBox=new ArrayList();
+       
+       //se tiene que sacar la lsita de strings y luego agregar a la lista
+
+       
+       
+       
        
         
         
         
         
         
+    }
+    public void comboboxgenero()
+    {
+        boolean existe=false; //generos
+       ArrayList<String> Generos=new ArrayList();
+       Generos.add("todos");
+       for(int i=0;i<info.size();i++)
+       {
+           existe=false;
+           for(int j=0;j<Generos.size();j++)
+           {
+               if(info.get(i).genero.equals(Generos.get(j)))
+               {
+                   existe=true;
+               }
+           }
+           if(existe!=true)
+           {
+               Generos.add(info.get(i).genero);
+           }
+       }
+        String[] listaComboboxGenero=new String[Generos.size()];
+        listaComboboxGenero=(String[]) Generos.toArray();
+        //agregamos los datos al combobox
+        
+        
+        
+        
+    }
+    public void comboboxdepartamentos()
+    {
+        boolean existe=false; //departamentos
+       ArrayList<String> departamentos=new ArrayList();
+       departamentos.add("todos");
+       for(int i=0;i<info.size();i++)
+       {
+           existe=false;
+           for(int j=0;j<departamentos.size();j++)
+           {
+               if(info.get(i).genero.equals(departamentos.get(j)))
+               {
+                   existe=true;
+               }
+           }
+           if(existe!=true)
+           {
+               departamentos.add(info.get(i).genero);
+           }
+       }
+        String[] listaComboboxdepartamentos=new String[departamentos.size()];
+        listaComboboxdepartamentos=(String[]) departamentos.toArray();
+        //agregamos los datos al combobox
+        
+        
+        
+        
+    }
+    public void comboboxestado()
+    {
+        boolean existe=false; //estado
+       ArrayList<String> estado=new ArrayList();
+       estado.add("todos");
+       for(int i=0;i<info.size();i++)
+       {
+           existe=false;
+           for(int j=0;j<estado.size();j++)
+           {
+               if(info.get(i).genero.equals(estado.get(j)))
+               {
+                   existe=true;
+               }
+           }
+           if(existe!=true)
+           {
+               estado.add(info.get(i).genero);
+           }
+       }
+        String[] listaComboboxestado=new String[estado.size()];
+        listaComboboxestado=(String[]) estado.toArray();
+        //agregamos los datos al combobox
+        
+        
+        
+        
+    }
+    public void datos_edades()
+    {
+        String[] RangosEdades=new String[21];
+        int edades=0;
+        for(int i=0;i<21;i++)
+        {
+            RangosEdades[i]=Integer.toString(edades)+" a ";
+            edades=edades+5;
+            RangosEdades[i]=RangosEdades[i]+Integer.toString(edades);
+            System.out.println(RangosEdades[i]);
+        } 
     }
 }
