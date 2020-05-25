@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -34,7 +36,6 @@ public class Interfaz1 extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        panelGrafico = new javax.swing.JPanel();
         grafico_torta = new javax.swing.JRadioButton();
         grafico_barras = new javax.swing.JRadioButton();
 
@@ -57,17 +58,6 @@ public class Interfaz1 extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout panelGraficoLayout = new javax.swing.GroupLayout(panelGrafico);
-        panelGrafico.setLayout(panelGraficoLayout);
-        panelGraficoLayout.setHorizontalGroup(
-            panelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
-        );
-        panelGraficoLayout.setVerticalGroup(
-            panelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
-        );
-
         grafico_torta.setText("Grafico de pastel");
 
         grafico_barras.setText("grafico de barras");
@@ -76,39 +66,38 @@ public class Interfaz1 extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(grafico_barras)
-                .addGap(28, 28, 28)
-                .addComponent(grafico_torta)
-                .addGap(23, 23, 23))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76))
             .addGroup(layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(124, 124, 124)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(62, 62, 62)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(82, 82, 82)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(62, 62, 62)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(sexos, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(68, 68, 68)
+                                .addComponent(departamento, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(62, 62, 62)
+                                .addComponent(edades, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61)
+                                .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(sexos, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68)
-                        .addComponent(departamento, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(62, 62, 62)
-                        .addComponent(edades, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61)
-                        .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
-                        .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(grafico_barras)
+                        .addGap(18, 18, 18)
+                        .addComponent(grafico_torta)))
+                .addGap(0, 40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,16 +115,14 @@ public class Interfaz1 extends javax.swing.JFrame {
                     .addComponent(edades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(grafico_barras)
                     .addComponent(grafico_torta))
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(jButton1)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGap(36, 36, 36))
         );
 
         pack();
@@ -148,7 +135,7 @@ public class Interfaz1 extends javax.swing.JFrame {
         if(sexos.getSelectedItem()=="todos")
         {
             edad=edades.getSelectedItem().toString().split(" a ");
-            double M=0,F=0;
+            double Masculino=0,Femenino=0;
             for(int i=0;i<info.size();i++)
             {
                 if(
@@ -159,14 +146,46 @@ public class Interfaz1 extends javax.swing.JFrame {
                 {
                     filtrado.add(info.get(i));
                 }
+            }
+            //se llena la tabla
+            DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
+            for(int i=tabla.getRowCount()-1;i>=0;i--)
+            {
+                modelo.removeRow(i);
+            }
+            agregar_filas(modelo, filtrado.size());
+            for(int i=0;i<filtrado.size();i++)
+            {
+                tabla.setValueAt(filtrado.get(i).Ciudad_de_Ubicacion, i, 0);
+                tabla.setValueAt(filtrado.get(i).Departamento, i, 1);
+                tabla.setValueAt(filtrado.get(i).edad, i, 2);
+                tabla.setValueAt(filtrado.get(i).genero, i, 3);
+                tabla.setValueAt(filtrado.get(i).estado, i, 4);
+                tabla.setValueAt(filtrado.get(i).Pais_de_procedencia, i, 5);
+            }
+            //se hace cuenta de cuantos son hombres y cuantos  mujeres
+            if(grafico_torta.isSelected())
+            {
+                for(int i=0;i<filtrado.size();i++)
+           {
+               if(filtrado.get(i).genero.equals("M"))
+               {
+                   Masculino++;
+               }else
+               {
+                   Femenino++;
+               }
+           }
+                System.out.println(Masculino+" y "+Femenino);
+            double[] datos={Masculino,Femenino};
+            String[] nombres={"Hombres","Mujeres"};
+            String titulo="Generos";
+            graficoDePie(datos, nombres,titulo);
                 
-                
-                
-                
-                
-                
+            
             }
            
+            
             
             
             
@@ -230,7 +249,6 @@ public class Interfaz1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel panelGrafico;
     private javax.swing.JComboBox<String> sexos;
     private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
@@ -401,13 +419,20 @@ public class Interfaz1 extends javax.swing.JFrame {
         
         
     }
-    public void graficoDePie(double a,double b)
+    public void graficoDePie(double[] datos,String[] nombres,String titulo)
     {
         DefaultPieDataset data =new DefaultPieDataset();
-        data.setValue("hombres", a);
-        data.setValue("mujeres", b);
-        JFreeChart chart =ChartFactory.createPieChart3D("generos", data);
-        
+        for(int i=0;i<datos.length;i++)
+        {
+            data.setValue(nombres[i], datos[i]);
+        }
+        JFreeChart chart =ChartFactory.createPieChart3D(titulo, data);
+        ChartPanel panelPie=new ChartPanel(chart);
+        JFrame ventana = new JFrame("Grafico");
+                ventana.setVisible(true);
+                ventana.setSize(800, 600);
+                ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                ventana.add(panelPie);
     }
 
     
