@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 public class Interfaz1 extends javax.swing.JFrame {
@@ -129,12 +130,13 @@ public class Interfaz1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
         String edad[]=new String[2];
         ArrayList <Informacion_relevante> filtrado=new ArrayList();
+        edad=edades.getSelectedItem().toString().split(" a ");
+        if(grafico_barras.isSelected()||grafico_torta.isSelected())
+        {
         if(sexos.getSelectedItem()=="todos")
         {
-            edad=edades.getSelectedItem().toString().split(" a ");
             double Masculino=0,Femenino=0;
             for(int i=0;i<info.size();i++)
             {
@@ -149,24 +151,11 @@ public class Interfaz1 extends javax.swing.JFrame {
             }
             //se llena la tabla
             DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
-            for(int i=tabla.getRowCount()-1;i>=0;i--)
-            {
-                modelo.removeRow(i);
-            }
+            vaciaTabla(modelo);
             agregar_filas(modelo, filtrado.size());
-            for(int i=0;i<filtrado.size();i++)
-            {
-                tabla.setValueAt(filtrado.get(i).Ciudad_de_Ubicacion, i, 0);
-                tabla.setValueAt(filtrado.get(i).Departamento, i, 1);
-                tabla.setValueAt(filtrado.get(i).edad, i, 2);
-                tabla.setValueAt(filtrado.get(i).genero, i, 3);
-                tabla.setValueAt(filtrado.get(i).estado, i, 4);
-                tabla.setValueAt(filtrado.get(i).Pais_de_procedencia, i, 5);
-            }
+            rellenarTabla(filtrado);
             //se hace cuenta de cuantos son hombres y cuantos  mujeres
-            if(grafico_torta.isSelected())
-            {
-                for(int i=0;i<filtrado.size();i++)
+            for(int i=0;i<filtrado.size();i++)
            {
                if(filtrado.get(i).genero.equals("M"))
                {
@@ -176,19 +165,102 @@ public class Interfaz1 extends javax.swing.JFrame {
                    Femenino++;
                }
            }
-                System.out.println(Masculino+" y "+Femenino);
             double[] datos={Masculino,Femenino};
             String[] nombres={"Hombres","Mujeres"};
-            String titulo="Generos";
-            graficoDePie(datos, nombres,titulo);
-                
-            
-            }
-           
-            
-            
-            
-            
+            String titulo="Casos de covid segun generos";
+            //se llama el grafico segun corresponda
+            generarGrafico(datos, nombres, titulo);
+          }else if(departamento.getSelectedItem().equals("todos"))
+          {
+              //se filtra la informacion que tenga los parametros 
+              String titulo="casos de covid-19 segun departamentos";
+              for(int i=0;i<info.size();i++)
+              {
+              if(
+                        (info.get(i).genero.equals(sexos.getSelectedItem()))&&
+                        ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
+                        (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
+                        (info.get(i).estado.equals(estado.getSelectedItem())))
+                {
+                    filtrado.add(info.get(i));
+                }
+              }
+              //se obtienen la cantidad de cada departamento
+              double[] datos=new double[departamento.getItemCount()-1];
+              String[] Dep=new String[departamento.getItemCount()-1];
+              for(int i=0;i<datos.length;i++)
+              {
+                  int j=0;
+                  datos[i]=j;
+                  Dep[i]=departamento.getItemAt(i+1);
+              }
+              for(int i=0;i<filtrado.size();i++)
+              {
+                  for(int j=0;j<Dep.length;j++)
+                  {
+                      if(filtrado.get(i).Departamento.equals(Dep[j]))
+                      {
+                          datos[j]++;
+                      }
+                  }
+              }
+              //se llena la tabla con la informacion
+              DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
+              vaciaTabla(modelo);
+              agregar_filas(modelo, filtrado.size());
+              rellenarTabla(filtrado);
+              //se genera el grafico
+              generarGrafico(datos, Dep, titulo);
+          }else if(edades.getSelectedItem().equals("todos"))
+          {
+              
+              
+              
+              
+              
+              
+          }else if(estado.getSelectedItem().equals("todos"))
+          {
+              //se filtra la informacion
+              String titulo="casos de covid-19 segun departamentos";
+              for(int i=0;i<info.size();i++)
+              {
+              if(
+                        (info.get(i).genero.equals(sexos.getSelectedItem()))&&
+                        ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
+                        (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
+                        (info.get(i).Departamento.equals(departamento.getSelectedItem())))
+                {
+                    filtrado.add(info.get(i));
+                }
+              }
+              //se obtienen la cantidad de cada estado
+              double[] datos=new double[estado.getItemCount()-1];
+              String[] est=new String[estado.getItemCount()-1];
+              for(int i=0;i<datos.length;i++)
+              {
+                  int j=0;
+                  datos[i]=j;
+                  est[i]=estado.getItemAt(i+1);
+              }
+              for(int i=0;i<filtrado.size();i++)
+              {
+                  for(int j=0;j<est.length;j++)
+                  {
+                      if(filtrado.get(i).estado.equals(est[j]))
+                      {
+                          datos[j]++;
+                      }
+                  }
+              }
+              //se llena la tabla con la informacion
+              DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
+              vaciaTabla(modelo);
+              agregar_filas(modelo, filtrado.size());
+              rellenarTabla(filtrado);
+              //se genera el grafico
+              generarGrafico(datos, est, titulo);
+          }
         }
         
         
@@ -292,15 +364,7 @@ public class Interfaz1 extends javax.swing.JFrame {
             DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
              agregarcolumnas(modelo);
              agregar_filas(modelo, info.size());
-            for(int i=0;i<info.size();i++)
-            {
-                tabla.setValueAt(info.get(i).Ciudad_de_Ubicacion,i, 0 );
-                tabla.setValueAt(info.get(i).Departamento, i, 1);
-                tabla.setValueAt(info.get(i).edad, i, 2);        
-                tabla.setValueAt(info.get(i).genero, i, 3);        
-                tabla.setValueAt(info.get(i).estado, i, 4);
-                tabla.setValueAt(info.get(i).Pais_de_procedencia, i, 5);
-            }
+            rellenarTabla(info);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -414,10 +478,20 @@ public class Interfaz1 extends javax.swing.JFrame {
            this.edades.addItem(RangosEdades.get(i));
        }  
     }
-    public void graficoDeBarras()
+    public void graficoDeBarras(double[] datos,String[] nombres,String titulo)
     {
-        
-        
+        DefaultCategoryDataset dataset=new DefaultCategoryDataset();
+        for(int i=0;i<datos.length;i++)
+        {
+            dataset.addValue(datos[i], nombres[i], titulo);
+        }
+        JFreeChart chart=ChartFactory.createBarChart(titulo, "", "cantidad", dataset);
+        ChartPanel panelBar=new ChartPanel(chart);
+        JFrame ventana = new JFrame("Grafico");
+                ventana.setVisible(true);
+                ventana.setSize(800, 600);
+                ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                ventana.add(panelBar);
     }
     public void graficoDePie(double[] datos,String[] nombres,String titulo)
     {
@@ -434,6 +508,33 @@ public class Interfaz1 extends javax.swing.JFrame {
                 ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 ventana.add(panelPie);
     }
-
-    
+    public void rellenarTabla(ArrayList<Informacion_relevante> filtrado)
+    {
+        for(int i=0;i<filtrado.size();i++)
+            {
+                tabla.setValueAt(filtrado.get(i).Ciudad_de_Ubicacion, i, 0);
+                tabla.setValueAt(filtrado.get(i).Departamento, i, 1);
+                tabla.setValueAt(filtrado.get(i).edad, i, 2);
+                tabla.setValueAt(filtrado.get(i).genero, i, 3);
+                tabla.setValueAt(filtrado.get(i).estado, i, 4);
+                tabla.setValueAt(filtrado.get(i).Pais_de_procedencia, i, 5);
+            }
+    }
+   public void generarGrafico(double[] datos,String[] nombres,String titulo)
+   {
+       if(grafico_torta.isSelected())
+            {
+            graficoDePie(datos, nombres,titulo);
+            }else if(grafico_barras.isSelected())
+            {
+                graficoDeBarras(datos, nombres, titulo);
+            }
+   }
+   public void vaciaTabla(DefaultTableModel modelo)
+   {
+       for(int i=tabla.getRowCount()-1;i>=0;i--)
+            {
+                modelo.removeRow(i);
+            }
+   }
 }
