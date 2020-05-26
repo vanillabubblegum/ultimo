@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -41,10 +43,6 @@ public class Interfaz1 extends javax.swing.JFrame {
         grafico_barras = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        departamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "todos", "Amazonas", "Antioquia", "Arauca", "Archipiélago de San Andrés Providencia y Santa Catalina", "Atlantico", "Barranquilla", "Bogotá D.C.", "Bolívar", "Boyacá", "Buenaventura D.E.", "Córdoba", "Caldas", "Caquetá", "Cartagena D.T. y C.", "Casanare", "Cauca", "Cesar", "Chocó", "Cundinamarca", "Huila", "La Guajira", "Magdalena", "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindio", "Risaralda", "Santa Marta D.T. y C.", "Santander", "Sucre", "Tolima", "Valle del Cauca", "Vaupés" }));
-
-        estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "todos", "Asintomático", "Fallecido", "Grave", "Leve", "Moderado ", "Recuperado" }));
 
         jLabel1.setText("Genero");
 
@@ -131,11 +129,11 @@ public class Interfaz1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String edad[]=new String[2];
         ArrayList <Informacion_relevante> filtrado=new ArrayList();
-        edad=edades.getSelectedItem().toString().split(" a ");
         if(grafico_barras.isSelected()||grafico_torta.isSelected())
         {
         if(sexos.getSelectedItem()=="todos")
         {
+            edad=edades.getSelectedItem().toString().split(" a ");
             double Masculino=0,Femenino=0;
             for(int i=0;i<info.size();i++)
             {
@@ -172,6 +170,7 @@ public class Interfaz1 extends javax.swing.JFrame {
           }else if(departamento.getSelectedItem().equals("todos"))
           {
               //se filtra la informacion que tenga los parametros 
+              edad=edades.getSelectedItem().toString().split(" a ");
               String titulo="casos de covid-19 segun departamentos";
               for(int i=0;i<info.size();i++)
               {
@@ -212,6 +211,52 @@ public class Interfaz1 extends javax.swing.JFrame {
               generarGrafico(datos, Dep, titulo);
           }else if(edades.getSelectedItem().equals("todos"))
           {
+              //se filtra la informacion
+              String titulo="casos de covid-19 segun rangos de edades";
+              for(int i=0;i<info.size();i++)
+              {
+              if(
+                        (info.get(i).genero.equals(sexos.getSelectedItem()))&&
+                        (info.get(i).estado.equals(estado.getSelectedItem()))&&
+                        (info.get(i).Departamento.equals(departamento.getSelectedItem())))
+                {
+                    filtrado.add(info.get(i));
+                }
+              }
+              //se rellena la tabla
+              DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
+              vaciaTabla(modelo);
+              agregar_filas(modelo, filtrado.size());
+              rellenarTabla(filtrado);
+              
+              //se obtiene la informacion segun cada categoria de edades
+              double[] datos=new double[edades.getItemCount()-1];
+              String[] Rangos_edades=new String[edades.getItemCount()-1];
+              for(int i=0;i<datos.length;i++)
+              {
+                  int j=0;
+                  datos[i]=j;
+                  Rangos_edades[i]=edades.getItemAt(i+1);
+              }
+              for(int i=0;i<filtrado.size();i++)
+              {
+                  for(int j=0;j<datos.length;j++)
+                  {
+                      edad=Rangos_edades[j].split(" a ");
+                      if(
+                        (Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
+                        (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))
+                      {
+                        datos[j]++;   
+                      }   
+                  }
+              }
+              generarGrafico(datos, Rangos_edades, titulo);
+              
+              
+              
+              
+              
               
               
               
@@ -221,7 +266,8 @@ public class Interfaz1 extends javax.swing.JFrame {
           }else if(estado.getSelectedItem().equals("todos"))
           {
               //se filtra la informacion
-              String titulo="casos de covid-19 segun departamentos";
+              edad=edades.getSelectedItem().toString().split(" a ");
+              String titulo="casos de covid-19 segun estado";
               for(int i=0;i<info.size();i++)
               {
               if(
@@ -357,8 +403,8 @@ public class Interfaz1 extends javax.swing.JFrame {
             //se asignan los datos a los combo box
             datos_edades();
             comboboxgenero();
-         
-            
+         comboboxdepartamentos();
+            comboboxestado();
             //se establece la tabla  y se llena la tabla con todos los datos 
             DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
              agregarcolumnas(modelo);
@@ -415,7 +461,8 @@ public class Interfaz1 extends javax.swing.JFrame {
     {
         boolean existe=false; //departamentos
        ArrayList<String> departamentos=new ArrayList();
-       departamentos.add("todos");
+       ArrayList<String> Departamentos_completo=new ArrayList();
+       Departamentos_completo.add("todos");
        for(int i=0;i<info.size();i++)
        {
            existe=false;
@@ -431,16 +478,19 @@ public class Interfaz1 extends javax.swing.JFrame {
                departamentos.add(info.get(i).Departamento);
            }
        }
+        Collections.sort(departamentos);
+        Departamentos_completo.addAll(departamentos);
         for(int i=0;i<departamentos.size();i++)
        {
-           departamento.addItem(departamentos.get(i));
+           departamento.addItem(Departamentos_completo.get(i));
        }  
     }
     public void comboboxestado()
     {
         boolean existe=false; //estado
        ArrayList<String> estado=new ArrayList();
-       estado.add("todos");
+       ArrayList<String> estado_completo=new ArrayList();
+       estado_completo.add("todos");
        for(int i=0;i<info.size();i++)
        {
            existe=false;
@@ -456,9 +506,11 @@ public class Interfaz1 extends javax.swing.JFrame {
                estado.add(info.get(i).estado);
            }
        }
+       Collections.sort(estado);
+       estado_completo.addAll(estado);
         for(int i=0;i<estado.size();i++)
        {
-           this.estado.addItem(estado.get(i));
+           this.estado.addItem(estado_completo.get(i));
        }    
     }
     public void datos_edades()
