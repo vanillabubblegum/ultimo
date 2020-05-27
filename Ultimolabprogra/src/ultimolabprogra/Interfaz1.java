@@ -18,6 +18,7 @@ import org.jfree.data.general.DefaultPieDataset;
 public class Interfaz1 extends javax.swing.JFrame {
     ArrayList<Informacion_relevante> info=new ArrayList();
     ArrayList <Informacion_relevante> filtrado=new ArrayList();
+    ArrayList<String> departamentos=new ArrayList();
     public Interfaz1() {
         initComponents();
         leerArchivo();
@@ -165,6 +166,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                 case 0:
                     edad=edades.getSelectedItem().toString().split(" a ");
                     filtrado.clear();
+                    String titlo="grafica general";
                     for(int i=0;i<info.size();i++)
             {
                 if(
@@ -181,15 +183,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     vaciaTabla(modelo);
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
-                    //falta colocar la informacion para las graficas pero npi el orden
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                    GraficaPorDepartamentos(titlo);
                     break;
                 case 1:
                     if(sexos.getSelectedItem()=="todos")
@@ -258,18 +252,18 @@ public class Interfaz1 extends javax.swing.JFrame {
               }
               //se obtienen la cantidad de cada departamento
               double[] datos=new double[Ciudade_procedencia.getItemCount()-1];
-              String[] Dep=new String[Ciudade_procedencia.getItemCount()-1];
+              String[] Ciu=new String[Ciudade_procedencia.getItemCount()-1];
               for(int i=0;i<datos.length;i++)
               {
                   int j=0;
                   datos[i]=j;
-                  Dep[i]=Ciudade_procedencia.getItemAt(i+1);
+                  Ciu[i]=Ciudade_procedencia.getItemAt(i+1);
               }
               for(int i=0;i<filtrado.size();i++)
               {
-                  for(int j=0;j<Dep.length;j++)
+                  for(int j=0;j<Ciu.length;j++)
                   {
-                      if(filtrado.get(i).Departamento.equals(Dep[j]))
+                      if(filtrado.get(i).Departamento.equals(Ciu[j]))
                       {
                           datos[j]++;
                       }
@@ -286,12 +280,8 @@ public class Interfaz1 extends javax.swing.JFrame {
                   JOptionPane.showMessageDialog(null, "no hay datos de estas caracteristicas");
               }else
               {
-                  generarGrafico(datos, Dep, titulo);
+                  generarGrafico(datos, Ciu, titulo);
               }
-              
-              
-              
-              
           }else if(edades.getSelectedItem().equals("todos"))
           {
               //se filtra la informacion
@@ -398,7 +388,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     if(sexos.getSelectedItem().equals("todos")&&Ciudade_procedencia.getSelectedItem().equals("todos"))
                     {
                     edad=edades.getSelectedItem().toString().split(" a ");
-                    String titulo="";
+                    String titulo="Grafico de estados y edades por departamento";
                     for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -415,12 +405,16 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
+                    GraficaPorDepartamentos(titulo);
+                    
+                    
+                    
                     
                         
                     }else if(sexos.getSelectedItem().equals("todos")&&edades.getSelectedItem().equals("todos"))
                     {
                         
-                    String titulo="";
+                    String titulo="Grafico de Pais de procedencia y estado del paciente vs Departamento";
                     for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -435,7 +429,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
-                        
+                    GraficaPorDepartamentos(titulo);
                         
                         
                         
@@ -445,7 +439,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     {
                        
                     edad=edades.getSelectedItem().toString().split(" a ");
-                    String titulo="";
+                    String titulo="Grafico de edades y paices de procedencia del paciente vs departamentos";
                     for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -462,14 +456,14 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
-                        
+                    GraficaPorDepartamentos(titulo);
                         
                         
                         
                     }else if(Ciudade_procedencia.getSelectedItem().equals("todos")&&edades.getSelectedItem().equals("todos"))
                     {
                         
-                   String titulo="";
+                   String titulo="Grafico de estados de los pacientes por generos vs departamentos";
                     for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -484,7 +478,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
-                        
+                    GraficaPorDepartamentos(titulo);
                         
                         
                         
@@ -492,10 +486,8 @@ public class Interfaz1 extends javax.swing.JFrame {
                         
                     }else if(Ciudade_procedencia.getSelectedItem().equals("todos")&&estado.getSelectedItem().equals("todos"))
                     {
-                        
-                        
                         edad=edades.getSelectedItem().toString().split(" a ");
-                    String titulo="";
+                    String titulo="Grafico de edades y generos vs departamentos";
                     for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -512,13 +504,12 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
-                        
+                    GraficaPorDepartamentos(titulo);
                         
                         
                     }else if(edades.getSelectedItem().equals("todos")&&estado.getSelectedItem().equals("todos"))
                     {
-                        
-                    String titulo="";
+                    String titulo="Grafico de Generos y paises de procedencia de los pacientes vs departamento";
                     for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -533,7 +524,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
-                        
+                    GraficaPorDepartamentos(titulo);  
                         
                     }
                     break;
@@ -543,12 +534,8 @@ public class Interfaz1 extends javax.swing.JFrame {
                             Ciudade_procedencia.getSelectedItem().equals("todos")&&
                             edades.getSelectedItem().equals("todos"))
                     {
-                        
-                        
-                        
-                        
-                        
-                    String titulo="";
+
+                    String titulo="Grafico estado de los pacientes vs departamentos";
                     for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -562,22 +549,15 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
-                        
-                        
-                        
+                    GraficaPorDepartamentos(titulo);
                     }else if(
                             sexos.getSelectedItem().equals("todos")&&
                             Ciudade_procedencia.getSelectedItem().equals("todos")&&
                             estado.getSelectedItem().equals("todos")
                             )
                     {
-                        
-                        
-                        
-                        
-                        
                         edad=edades.getSelectedItem().toString().split(" a ");
-                        String titulo="";
+                        String titulo="Grafico de edades 19 vs departamentos";
                     for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -592,23 +572,14 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
-                        
-                        
-                        
-                        
-                        
-                        
+                    GraficaPorDepartamentos(titulo);    
                     }else if(
                             sexos.getSelectedItem().equals("todos")&&
                             estado.getSelectedItem().equals("todos")&&
                             edades.getSelectedItem().equals("todos")
                             )
                     {
-                        
-                        
-                        
-                        
-                        String titulo="";
+                        String titulo="grafico de paices de procedencia vs departamentos";
                         for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -622,20 +593,14 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //se genera el grafico
-                        
-                        
-                        
-                        
+                    GraficaPorDepartamentos(titulo);     
                     }else if(
                             estado.getSelectedItem().equals("todos")&&
                             Ciudade_procedencia.getSelectedItem().equals("todos")&&
                             edades.getSelectedItem().equals("todos")
                             )
                     {
-                        
-                        
-                        
-                        String titulo="";
+                        String titulo="Grafico de generos vs departamentos";
                         for(int i=0;i<info.size();i++)
                     {
                     if(
@@ -649,24 +614,11 @@ public class Interfaz1 extends javax.swing.JFrame {
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
                     //generar grafica
-                    
-                    
+                    GraficaPorDepartamentos(titulo);
                     }       
             }
         
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -768,6 +720,7 @@ public class Interfaz1 extends javax.swing.JFrame {
             comboboxgenero();
             comboboxCiudadeProcedencia();
             comboboxestado();
+            Obtenerdepartamentos();
             //se establece la tabla  y se llena la tabla con todos los datos 
             DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
              agregarcolumnas(modelo);
@@ -822,7 +775,7 @@ public class Interfaz1 extends javax.swing.JFrame {
     }
     public void comboboxCiudadeProcedencia()
     {
-        boolean existe=false; //departamentos
+        boolean existe=false; 
        ArrayList<String> CiudadesProcedencia=new ArrayList();
        ArrayList<String> CiudadesProcedencia_completo=new ArrayList();
        CiudadesProcedencia_completo.add("todos");
@@ -950,5 +903,51 @@ public class Interfaz1 extends javax.swing.JFrame {
             {
                 modelo.removeRow(i);
             }
+   }
+   public void Obtenerdepartamentos()
+   {
+       boolean existe=false; 
+       ArrayList<String> dep=new ArrayList();
+       for(int i=0;i<info.size();i++)
+       {
+           existe=false;
+           for(int j=0;j<dep.size();j++)
+           {
+               if(info.get(i).Departamento.equals(dep.get(j)))
+               {
+                   existe=true;
+               }
+           }
+           if(existe!=true)
+           {
+               dep.add(info.get(i).Departamento);
+           }
+       }
+       departamentos.addAll(dep);
+   }
+   public void GraficaPorDepartamentos(String titulo)
+   {
+       double[] dats=new double[departamentos.size()];
+                    String[] Dep=new String[departamentos.size()];
+                    
+                    for(int i=0;i<dats.length;i++)
+                    {
+                        int j=0;
+                        dats[i]=j;
+                        Dep[i]=departamentos.get(i);
+                    }
+                    for(int i=0;i<filtrado.size();i++)
+                    {
+                        for(int j=0;j<Dep.length;j++)
+                        {
+                            if(filtrado.get(i).Departamento.equals(Dep[j]))
+                            {
+                                dats[j]++;
+                            }
+                        }
+                    }
+                    //se genenra la grafica
+                    generarGrafico(dats, Dep, titulo);
+       
    }
 }
