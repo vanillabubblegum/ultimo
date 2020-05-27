@@ -17,6 +17,7 @@ import org.jfree.data.general.DefaultPieDataset;
 
 public class Interfaz1 extends javax.swing.JFrame {
     ArrayList<Informacion_relevante> info=new ArrayList();
+    ArrayList <Informacion_relevante> filtrado=new ArrayList();
     public Interfaz1() {
         initComponents();
         leerArchivo();
@@ -71,7 +72,7 @@ public class Interfaz1 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(grafico_torta)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,13 +89,12 @@ public class Interfaz1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(grafico_barras)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(estado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(grafico_barras)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -128,10 +128,56 @@ public class Interfaz1 extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String edad[]=new String[2];
-        ArrayList <Informacion_relevante> filtrado=new ArrayList();
+        int cantidad_elecciones_todos=0;
+        DefaultTableModel modelo=(DefaultTableModel)tabla.getModel();
+        if(sexos.getSelectedItem()=="todos")
+        {
+            cantidad_elecciones_todos++;
+        }
+        if(departamento.getSelectedItem()=="todos")
+        {
+            cantidad_elecciones_todos++;
+        }
+        if(edades.getSelectedItem()=="todos")
+        {
+            cantidad_elecciones_todos++;
+        }
+        if(estado.getSelectedItem()=="todos")
+        {
+            cantidad_elecciones_todos++;
+        }
         if(grafico_barras.isSelected()||grafico_torta.isSelected())
         {
-        if(sexos.getSelectedItem()=="todos")
+            switch(cantidad_elecciones_todos)
+            {
+                case 0:
+                    edad=edades.getSelectedItem().toString().split(" a ");
+                    for(int i=0;i<info.size();i++)
+            {
+                if(
+                        (info.get(i).Departamento.equals(departamento.getSelectedItem()))&&
+                        ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
+                        (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
+                        (info.get(i).estado.equals(estado.getSelectedItem()))&&
+                        (info.get(i).genero.equals(sexos.getSelectedItem())))
+                {
+                    filtrado.add(info.get(i));
+                }
+            }
+                    //se rellena la tabla
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //falta colocar la informacion para las graficas pero npi el orden
+                    
+                    
+                    
+                    
+                    
+                    
+                    break;
+                case 1:
+                    if(sexos.getSelectedItem()=="todos")
         {
             edad=edades.getSelectedItem().toString().split(" a ");
             double Masculino=0,Femenino=0;
@@ -147,7 +193,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                 }
             }
             //se llena la tabla
-            DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
+            
             vaciaTabla(modelo);
             agregar_filas(modelo, filtrado.size());
             rellenarTabla(filtrado);
@@ -203,7 +249,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                   }
               }
               //se llena la tabla con la informacion
-              DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
+              
               vaciaTabla(modelo);
               agregar_filas(modelo, filtrado.size());
               rellenarTabla(filtrado);
@@ -224,7 +270,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                 }
               }
               //se rellena la tabla
-              DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
+              
               vaciaTabla(modelo);
               agregar_filas(modelo, filtrado.size());
               rellenarTabla(filtrado);
@@ -251,18 +297,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                       }   
                   }
               }
-              generarGrafico(datos, Rangos_edades, titulo);
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
+              generarGrafico(datos, Rangos_edades, titulo);      
           }else if(estado.getSelectedItem().equals("todos"))
           {
               //se filtra la informacion
@@ -299,13 +334,288 @@ public class Interfaz1 extends javax.swing.JFrame {
                   }
               }
               //se llena la tabla con la informacion
-              DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
+              
               vaciaTabla(modelo);
               agregar_filas(modelo, filtrado.size());
               rellenarTabla(filtrado);
               //se genera el grafico
               generarGrafico(datos, est, titulo);
           }
+                    break;
+                case 2:
+                    if(sexos.getSelectedItem().equals("todos")&&departamento.getSelectedItem().equals("todos"))
+                    {
+                    edad=edades.getSelectedItem().toString().split(" a ");
+                    String titulo="";
+                    for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
+                              (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
+                              (info.get(i).estado.equals(estado.getSelectedItem()))
+                            )
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    } 
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                    
+                        
+                    }else if(sexos.getSelectedItem().equals("todos")&&edades.getSelectedItem().equals("todos"))
+                    {
+                        
+                    String titulo="";
+                    for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              (info.get(i).Departamento.equals(departamento.getSelectedItem())&&
+                              (info.get(i).estado.equals(estado.getSelectedItem()))))
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    } 
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                        
+                        
+                        
+                        
+                    }else if(sexos.getSelectedItem().equals("todos")&&estado.getSelectedItem().equals("todos"))
+                    {
+                       
+                    edad=edades.getSelectedItem().toString().split(" a ");
+                    String titulo="";
+                    for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
+                              (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
+                              (info.get(i).Departamento.equals(departamento.getSelectedItem()))
+                            )
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    } 
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                        
+                        
+                    }else if(departamento.getSelectedItem().equals("todos")&&edades.getSelectedItem().equals("todos"))
+                    {
+                        
+                   String titulo="";
+                    for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              (info.get(i).genero.equals(sexos.getSelectedItem())&&
+                              (info.get(i).estado.equals(estado.getSelectedItem()))))
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    } 
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                        
+                        
+                        
+                        
+                    }else if(departamento.getSelectedItem().equals("todos")&&estado.getSelectedItem().equals("todos"))
+                    {
+                        
+                        
+                        edad=edades.getSelectedItem().toString().split(" a ");
+                    String titulo="";
+                    for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
+                              (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
+                              (info.get(i).genero.equals(sexos.getSelectedItem()))
+                            )
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    } 
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                        
+                    }else if(edades.getSelectedItem().equals("todos")&&estado.getSelectedItem().equals("todos"))
+                    {
+                        
+                    String titulo="";
+                    for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              (info.get(i).Departamento.equals(departamento.getSelectedItem())&&
+                              (info.get(i).genero.equals(sexos.getSelectedItem()))))
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    } 
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                    }
+                    break;
+                case 3:
+                    if(
+                            sexos.getSelectedItem().equals("todos")&&
+                            departamento.getSelectedItem().equals("todos")&&
+                            edades.getSelectedItem().equals("todos"))
+                    {
+                        
+                        
+                        
+                        
+                        
+                    String titulo="";
+                    for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              (info.get(i).estado.equals(estado.getSelectedItem())))
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    } 
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                        
+                    }else if(
+                            sexos.getSelectedItem().equals("todos")&&
+                            departamento.getSelectedItem().equals("todos")&&
+                            estado.getSelectedItem().equals("todos")
+                            )
+                    {
+                        
+                        
+                        
+                        
+                        
+                        edad=edades.getSelectedItem().toString().split(" a ");
+                        String titulo="";
+                    for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
+                              (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1]))))
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    } 
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                        
+                        
+                        
+                        
+                    }else if(
+                            sexos.getSelectedItem().equals("todos")&&
+                            estado.getSelectedItem().equals("todos")&&
+                            edades.getSelectedItem().equals("todos")
+                            )
+                    {
+                        
+                        
+                        
+                        
+                        String titulo="";
+                        for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              (info.get(i).Departamento.equals(departamento.getSelectedItem())))
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    }
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                        
+                        
+                    }else if(
+                            estado.getSelectedItem().equals("todos")&&
+                            departamento.getSelectedItem().equals("todos")&&
+                            edades.getSelectedItem().equals("todos")
+                            )
+                    {
+                        
+                        
+                        
+                        String titulo="";
+                        for(int i=0;i<info.size();i++)
+                    {
+                    if(
+                              (info.get(i).genero.equals(sexos.getSelectedItem())))
+                      {
+                          filtrado.add(info.get(i));
+                      }
+                    }
+                    //se agregan los datos a la tabla 
+                    vaciaTabla(modelo);
+                    agregar_filas(modelo, filtrado.size());
+                    rellenarTabla(filtrado);
+                    //se genera el grafico
+                        
+                        
+                        
+                        
+                        
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    break;
+            }
+        
         }
         
         
