@@ -9,7 +9,7 @@ public class procesos {
     {
         FileWriter writer = null;
     try {
-        writer = new FileWriter("curso.csv");
+        writer = new FileWriter("filtrado.csv");
     } catch (IOException ex) {
         Logger.getLogger(Interfaz1.class.getName()).log(Level.SEVERE, null, ex);
     }

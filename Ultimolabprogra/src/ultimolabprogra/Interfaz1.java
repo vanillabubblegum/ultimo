@@ -30,7 +30,7 @@ public class Interfaz1 extends javax.swing.JFrame {
 
         grupo_de_botones = new javax.swing.ButtonGroup();
         sexos = new javax.swing.JComboBox<>();
-        departamento = new javax.swing.JComboBox<>();
+        Ciudade_procedencia = new javax.swing.JComboBox<>();
         edades = new javax.swing.JComboBox<>();
         estado = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -48,7 +48,7 @@ public class Interfaz1 extends javax.swing.JFrame {
 
         jLabel1.setText("Genero");
 
-        jLabel2.setText("Departamento");
+        jLabel2.setText("pais de procedencia");
 
         jLabel3.setText("Edades");
 
@@ -87,7 +87,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                             .addComponent(sexos, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(departamento, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Ciudade_procedencia, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +120,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sexos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(departamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Ciudade_procedencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(edades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -146,7 +146,7 @@ public class Interfaz1 extends javax.swing.JFrame {
         {
             cantidad_elecciones_todos++;
         }
-        if(departamento.getSelectedItem()=="todos")
+        if(Ciudade_procedencia.getSelectedItem()=="todos")
         {
             cantidad_elecciones_todos++;
         }
@@ -164,10 +164,11 @@ public class Interfaz1 extends javax.swing.JFrame {
             {
                 case 0:
                     edad=edades.getSelectedItem().toString().split(" a ");
+                    filtrado.clear();
                     for(int i=0;i<info.size();i++)
             {
                 if(
-                        (info.get(i).Departamento.equals(departamento.getSelectedItem()))&&
+                        (info.get(i).Pais_de_procedencia.equals(Ciudade_procedencia.getSelectedItem()))&&
                         ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
                         (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
                         (info.get(i).estado.equals(estado.getSelectedItem()))&&
@@ -187,16 +188,19 @@ public class Interfaz1 extends javax.swing.JFrame {
                     
                     
                     
+                    
+                    
                     break;
                 case 1:
                     if(sexos.getSelectedItem()=="todos")
         {
+            filtrado.clear();
             edad=edades.getSelectedItem().toString().split(" a ");
             double Masculino=0,Femenino=0;
             for(int i=0;i<info.size();i++)
             {
                 if(
-                        (info.get(i).Departamento.equals(departamento.getSelectedItem()))&&
+                        (info.get(i).Pais_de_procedencia.equals(Ciudade_procedencia.getSelectedItem()))&&
                         ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
                         (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
                         (info.get(i).estado.equals(estado.getSelectedItem())))
@@ -224,10 +228,21 @@ public class Interfaz1 extends javax.swing.JFrame {
             String[] nombres={"Hombres","Mujeres"};
             String titulo="Casos de covid segun generos";
             //se llama el grafico segun corresponda
-            generarGrafico(datos, nombres, titulo);
-          }else if(departamento.getSelectedItem().equals("todos"))
+            if(filtrado.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "no hay datos de estas caracteristicas");
+            }else
+            {
+                generarGrafico(datos, nombres, titulo);
+            }
+            
+            
+            
+            
+          }else if(Ciudade_procedencia.getSelectedItem().equals("todos"))
           {
               //se filtra la informacion que tenga los parametros 
+              filtrado.clear();
               edad=edades.getSelectedItem().toString().split(" a ");
               String titulo="casos de covid-19 segun departamentos";
               for(int i=0;i<info.size();i++)
@@ -242,13 +257,13 @@ public class Interfaz1 extends javax.swing.JFrame {
                 }
               }
               //se obtienen la cantidad de cada departamento
-              double[] datos=new double[departamento.getItemCount()-1];
-              String[] Dep=new String[departamento.getItemCount()-1];
+              double[] datos=new double[Ciudade_procedencia.getItemCount()-1];
+              String[] Dep=new String[Ciudade_procedencia.getItemCount()-1];
               for(int i=0;i<datos.length;i++)
               {
                   int j=0;
                   datos[i]=j;
-                  Dep[i]=departamento.getItemAt(i+1);
+                  Dep[i]=Ciudade_procedencia.getItemAt(i+1);
               }
               for(int i=0;i<filtrado.size();i++)
               {
@@ -266,17 +281,28 @@ public class Interfaz1 extends javax.swing.JFrame {
               agregar_filas(modelo, filtrado.size());
               rellenarTabla(filtrado);
               //se genera el grafico
-              generarGrafico(datos, Dep, titulo);
+              if(filtrado.isEmpty())
+              {
+                  JOptionPane.showMessageDialog(null, "no hay datos de estas caracteristicas");
+              }else
+              {
+                  generarGrafico(datos, Dep, titulo);
+              }
+              
+              
+              
+              
           }else if(edades.getSelectedItem().equals("todos"))
           {
               //se filtra la informacion
+              filtrado.clear();
               String titulo="casos de covid-19 segun rangos de edades";
               for(int i=0;i<info.size();i++)
               {
               if(
                         (info.get(i).genero.equals(sexos.getSelectedItem()))&&
                         (info.get(i).estado.equals(estado.getSelectedItem()))&&
-                        (info.get(i).Departamento.equals(departamento.getSelectedItem())))
+                        (info.get(i).Pais_de_procedencia.equals(Ciudade_procedencia.getSelectedItem())))
                 {
                     filtrado.add(info.get(i));
                 }
@@ -309,10 +335,18 @@ public class Interfaz1 extends javax.swing.JFrame {
                       }   
                   }
               }
-              generarGrafico(datos, Rangos_edades, titulo);      
+              if(filtrado.isEmpty())
+              {
+                  JOptionPane.showMessageDialog(null, "no hay datos de estas caracteristicas");
+              }else
+              {
+                  generarGrafico(datos, Rangos_edades, titulo);      
+              }
+              
           }else if(estado.getSelectedItem().equals("todos"))
           {
               //se filtra la informacion
+              filtrado.clear();
               edad=edades.getSelectedItem().toString().split(" a ");
               String titulo="casos de covid-19 segun estado";
               for(int i=0;i<info.size();i++)
@@ -321,7 +355,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                         (info.get(i).genero.equals(sexos.getSelectedItem()))&&
                         ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
                         (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
-                        (info.get(i).Departamento.equals(departamento.getSelectedItem())))
+                        (info.get(i).Pais_de_procedencia.equals(Ciudade_procedencia.getSelectedItem())))
                 {
                     filtrado.add(info.get(i));
                 }
@@ -351,11 +385,17 @@ public class Interfaz1 extends javax.swing.JFrame {
               agregar_filas(modelo, filtrado.size());
               rellenarTabla(filtrado);
               //se genera el grafico
-              generarGrafico(datos, est, titulo);
+              if(filtrado.isEmpty())
+              {
+                  JOptionPane.showMessageDialog(null, "no hay datos de estas caracteristicas");
+              }else
+              {
+                  generarGrafico(datos, est, titulo);
+              }
           }
                     break;
-                case 2:
-                    if(sexos.getSelectedItem().equals("todos")&&departamento.getSelectedItem().equals("todos"))
+                    case 2:
+                    if(sexos.getSelectedItem().equals("todos")&&Ciudade_procedencia.getSelectedItem().equals("todos"))
                     {
                     edad=edades.getSelectedItem().toString().split(" a ");
                     String titulo="";
@@ -384,7 +424,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     for(int i=0;i<info.size();i++)
                     {
                     if(
-                              (info.get(i).Departamento.equals(departamento.getSelectedItem())&&
+                              (info.get(i).Pais_de_procedencia.equals(Ciudade_procedencia.getSelectedItem())&&
                               (info.get(i).estado.equals(estado.getSelectedItem()))))
                       {
                           filtrado.add(info.get(i));
@@ -411,7 +451,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     if(
                               ((Integer.parseInt(info.get(i).edad)>=Integer.parseInt(edad[0]))&&
                               (Integer.parseInt(info.get(i).edad)<=Integer.parseInt(edad[1])))&&
-                              (info.get(i).Departamento.equals(departamento.getSelectedItem()))
+                              (info.get(i).Pais_de_procedencia.equals(Ciudade_procedencia.getSelectedItem()))
                             )
                       {
                           filtrado.add(info.get(i));
@@ -426,7 +466,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                         
                         
                         
-                    }else if(departamento.getSelectedItem().equals("todos")&&edades.getSelectedItem().equals("todos"))
+                    }else if(Ciudade_procedencia.getSelectedItem().equals("todos")&&edades.getSelectedItem().equals("todos"))
                     {
                         
                    String titulo="";
@@ -450,7 +490,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                         
                         
                         
-                    }else if(departamento.getSelectedItem().equals("todos")&&estado.getSelectedItem().equals("todos"))
+                    }else if(Ciudade_procedencia.getSelectedItem().equals("todos")&&estado.getSelectedItem().equals("todos"))
                     {
                         
                         
@@ -482,7 +522,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                     for(int i=0;i<info.size();i++)
                     {
                     if(
-                              (info.get(i).Departamento.equals(departamento.getSelectedItem())&&
+                              (info.get(i).Pais_de_procedencia.equals(Ciudade_procedencia.getSelectedItem())&&
                               (info.get(i).genero.equals(sexos.getSelectedItem()))))
                       {
                           filtrado.add(info.get(i));
@@ -497,10 +537,10 @@ public class Interfaz1 extends javax.swing.JFrame {
                         
                     }
                     break;
-                case 3:
+                    case 3:
                     if(
                             sexos.getSelectedItem().equals("todos")&&
-                            departamento.getSelectedItem().equals("todos")&&
+                            Ciudade_procedencia.getSelectedItem().equals("todos")&&
                             edades.getSelectedItem().equals("todos"))
                     {
                         
@@ -527,7 +567,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                         
                     }else if(
                             sexos.getSelectedItem().equals("todos")&&
-                            departamento.getSelectedItem().equals("todos")&&
+                            Ciudade_procedencia.getSelectedItem().equals("todos")&&
                             estado.getSelectedItem().equals("todos")
                             )
                     {
@@ -572,7 +612,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                         for(int i=0;i<info.size();i++)
                     {
                     if(
-                              (info.get(i).Departamento.equals(departamento.getSelectedItem())))
+                              (info.get(i).Pais_de_procedencia.equals(Ciudade_procedencia.getSelectedItem())))
                       {
                           filtrado.add(info.get(i));
                       }
@@ -588,7 +628,7 @@ public class Interfaz1 extends javax.swing.JFrame {
                         
                     }else if(
                             estado.getSelectedItem().equals("todos")&&
-                            departamento.getSelectedItem().equals("todos")&&
+                            Ciudade_procedencia.getSelectedItem().equals("todos")&&
                             edades.getSelectedItem().equals("todos")
                             )
                     {
@@ -608,24 +648,10 @@ public class Interfaz1 extends javax.swing.JFrame {
                     vaciaTabla(modelo);
                     agregar_filas(modelo, filtrado.size());
                     rellenarTabla(filtrado);
-                    //se genera el grafico
-                        
-                        
-                        
-                        
-                        
-                    }
+                    //generar grafica
                     
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    break;
+                    }       
             }
         
         }
@@ -690,7 +716,7 @@ public class Interfaz1 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> departamento;
+    private javax.swing.JComboBox<String> Ciudade_procedencia;
     private javax.swing.JComboBox<String> edades;
     private javax.swing.JComboBox<String> estado;
     private javax.swing.JRadioButton grafico_barras;
@@ -740,7 +766,7 @@ public class Interfaz1 extends javax.swing.JFrame {
             //se asignan los datos a los combo box
             datos_edades();
             comboboxgenero();
-         comboboxdepartamentos();
+            comboboxCiudadeProcedencia();
             comboboxestado();
             //se establece la tabla  y se llena la tabla con todos los datos 
             DefaultTableModel modelo=(DefaultTableModel) tabla.getModel();
@@ -794,32 +820,32 @@ public class Interfaz1 extends javax.swing.JFrame {
            sexos.addItem(Generos.get(i));
        }   
     }
-    public void comboboxdepartamentos()
+    public void comboboxCiudadeProcedencia()
     {
         boolean existe=false; //departamentos
-       ArrayList<String> departamentos=new ArrayList();
-       ArrayList<String> Departamentos_completo=new ArrayList();
-       Departamentos_completo.add("todos");
+       ArrayList<String> CiudadesProcedencia=new ArrayList();
+       ArrayList<String> CiudadesProcedencia_completo=new ArrayList();
+       CiudadesProcedencia_completo.add("todos");
        for(int i=0;i<info.size();i++)
        {
            existe=false;
-           for(int j=0;j<departamentos.size();j++)
+           for(int j=0;j<CiudadesProcedencia.size();j++)
            {
-               if(info.get(i).Departamento.equals(departamentos.get(j)))
+               if(info.get(i).Pais_de_procedencia.equals(CiudadesProcedencia.get(j)))
                {
                    existe=true;
                }
            }
            if(existe!=true)
            {
-               departamentos.add(info.get(i).Departamento);
+               CiudadesProcedencia.add(info.get(i).Pais_de_procedencia);
            }
        }
-        Collections.sort(departamentos);
-        Departamentos_completo.addAll(departamentos);
-        for(int i=0;i<departamentos.size();i++)
+        Collections.sort(CiudadesProcedencia);
+        CiudadesProcedencia_completo.addAll(CiudadesProcedencia);
+        for(int i=0;i<CiudadesProcedencia.size();i++)
        {
-           departamento.addItem(Departamentos_completo.get(i));
+           Ciudade_procedencia.addItem(CiudadesProcedencia_completo.get(i));
        }  
     }
     public void comboboxestado()

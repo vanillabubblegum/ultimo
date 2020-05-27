@@ -37,7 +37,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="departamento" min="-2" pref="117" max="-2" attributes="0"/>
+                          <Component id="Ciudade_procedencia" min="-2" pref="117" max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -81,7 +81,7 @@
               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="sexos" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="departamento" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="Ciudade_procedencia" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="edades" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="estado" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -113,7 +113,7 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JComboBox" name="departamento">
+    <Component class="javax.swing.JComboBox" name="Ciudade_procedencia">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
@@ -150,7 +150,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Departamento"/>
+        <Property name="text" type="java.lang.String" value="pais de procedencia"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
